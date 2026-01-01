@@ -2,7 +2,7 @@
 
 ## a) Group Members
 | Name | Matric Number |
-| :--- | :--- | :--- |
+| :--- | :--- |
 | **Firdaus Muhammad Salman** | 2223281 |
 | [Member 2 Name] | [Matric No] |
 | [Member 3 Name] | [Matric No] |
