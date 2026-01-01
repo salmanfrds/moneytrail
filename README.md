@@ -61,12 +61,12 @@
 *> Note: Please refer to the `screenshots` folder for actual screen captures.*
 
 ### 1. Login & Dashboard
-
-
+![Login Screen](assets/login_placeholder.png) 
+*(Replace this path with your actual uploaded screenshot)*
 
 ### 2. Add Transaction & History
-
-
+![History Screen](assets/history_placeholder.png)
+*(Replace this path with your actual uploaded screenshot)*
 
 ---
 
@@ -130,3 +130,9 @@ graph TD
     
     G -- Swipe Item --> J[Delete Transaction]
     H -- Click Logout --> K[Logout & Return to Login]
+```
+
+### Next Steps for you:
+1.  **Copy** the code above into a file named `README.md` in your GitHub repository.
+2.  **Take Screenshots:** Run your provided code in an emulator, take screenshots of the Login, Dashboard, and Add Transaction screens, and upload them to your repo. Replace the `` lines with the actual image links (e.g., `![Login Screen](assets/login.png)`).
+3.  **Fill in Members:** Don't forget to update the table in section (a) with your actual group details.
