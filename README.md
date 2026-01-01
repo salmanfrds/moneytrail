@@ -3,12 +3,9 @@
 ## a) Group Members
 | Name | Matric Number | Role |
 | :--- | :--- | :--- |
-| **[Your Name]** | [Your Matric No] | Lead Developer / UI |
-| [Member 2 Name] | [Matric No] | [Role, e.g., Backend/Documentation] |
-| [Member 3 Name] | [Matric No] | [Role, e.g., QA/Tester] |
-| [Member 4 Name] | [Matric No] | [Role, e.g., Designer] |
-
----
+| **Firdaus Muhammad Salman** | 2223281 |
+| [Member 2 Name] | [Matric No] |
+| [Member 3 Name] | [Matric No] |
 
 ## b) Project Title
 **MoneyTrail: Simple Budget Tracker**
