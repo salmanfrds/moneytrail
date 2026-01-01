@@ -1,7 +1,7 @@
 # MoneyTrail - Mobile Application Proposal
 
 ## a) Group Members
-| Name | Matric Number | Role |
+| Name | Matric Number |
 | :--- | :--- | :--- |
 | **Firdaus Muhammad Salman** | 2223281 |
 | [Member 2 Name] | [Matric No] |
