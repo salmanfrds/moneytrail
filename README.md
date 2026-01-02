@@ -55,15 +55,28 @@ MoneyTrail is a mobile budget tracker application designed to help users monitor
 ---
 
 ## g) Proposed UI Mock-up
-*> Note: Please refer to the `screenshots` folder for actual screen captures.*
+*> Note: Please refer to the `prototype/` folder for the actual high-resolution screen captures.*
 
-### 1. Login & Dashboard
-![Login Screen](assets/login_placeholder.png) 
-*(Replace this path with your actual uploaded screenshot)*
+### 1. Authentication & Dashboard
+This section covers the user entry point and the main landing screen of the application.
 
-### 2. Add Transaction & History
-![History Screen](assets/history_placeholder.png)
-*(Replace this path with your actual uploaded screenshot)*
+| Login Screen | Homepage / Dashboard |
+| :---: | :---: |
+| ![Login Screen](prototype/login.png) | ![Homepage](prototype/homepage.png) |
+
+### 2. Core Features (Transactions)
+Users can efficiently add new data and review their full history through these interfaces.
+
+| Add Transaction | Transaction History |
+| :---: | :---: |
+| ![Add Transaction](prototype/add.png) | ![History Screen](prototype/history.png) |
+
+### 3. Account Management
+The user profile screen allows for personal data management and application settings.
+
+| User Profile |
+| :---: |
+| ![User Profile](prototype/user.png) |
 
 ---
 
@@ -129,6 +142,7 @@ graph TD
     H -- Click Logout --> K[Logout & Return to Login]
 ```
 
+## k) Reference
 ### Next Steps for you:
 1.  **Copy** the code above into a file named `README.md` in your GitHub repository.
 2.  **Take Screenshots:** Run your provided code in an emulator, take screenshots of the Login, Dashboard, and Add Transaction screens, and upload them to your repo. Replace the `` lines with the actual image links (e.g., `![Login Screen](assets/login.png)`).
