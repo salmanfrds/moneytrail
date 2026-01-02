@@ -4,11 +4,11 @@
 | Name | Matric Number |
 | :--- | :--- |
 | **Firdaus Muhammad Salman** | 2223281 |
-| [Member 2 Name] | [Matric No] |
+| Siti Hajar 'Aainaa Binti Hamid | 2218648 |
 | [Member 3 Name] | [Matric No] |
 
 ## b) Project Title
-**MoneyTrail: Simple Budget Tracker**
+**MoneyTrail: A Personal Budget Tracking Mobile Application**
 
 ---
 
