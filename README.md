@@ -13,26 +13,26 @@
 ---
 
 ## c) Introduction
-**Problem:** Many students and young professionals struggle to keep track of their daily expenses. Complex financial apps often have steep learning curves and too many unnecessary features, leading to user abandonment.
+Managing personal finances is a common challenge, especially among students and young adults who often struggle to track daily expenses, control spending habits, and plan savings effectively. Many individuals still rely on manual methods or fragmented tools, which can be time-consuming and prone to errors. As a result, users may lose awareness of where their money is being spent, leading to poor financial decisions and financial stress.
 
-**Motivation:** We want to build a "frictionless" tracking experience. The goal is to allow users to record a transaction in under 5 seconds.
-
-**Relevance:** Financial literacy starts with awareness. By providing a straightforward tool for tracking income versus expenses, users can make better financial decisions and manage their monthly budgets effectively.
+MoneyTrail is a mobile budget tracker application designed to help users monitor their income and expenses in a simple, organised, and user-friendly manner. The application is motivated by the growing need for financial awareness and discipline in daily life. By providing clear insights through categorised expenses, summaries, and visual indicators, MoneyTrail aims to support better financial planning and responsible money management.
 
 ---
 
 ## d) Objectives
-1. To develop a cross-platform mobile application using Flutter for tracking personal finances.
-2. To provide a clear visualization of the user's current balance and recent transaction history.
-3. To implement a secure authentication system for user data privacy.
-4. To enable CRUD (Create, Read, Update, Delete) functionality for daily transactions.
+1. To help users record and track daily income and expenses efficiently.
+2. To enable users to categorise expenses for better spending analysis.
+3. To provide a clear overview of monthly budgets and remaining balances.
+4. To increase users’ awareness of their spending patterns.
+5. To support better financial planning and savings habits.
 
 ---
 
 ## e) Target Users
-* **University Students:** Who need to manage limited allowances/loans (PTPTN).
-* **Young Professionals:** Who are just starting to manage their own salaries.
-* **Gig Workers:** Who need to track irregular income streams and daily expenses.
+* University and college students managing limited allowances.
+* Young professionals who want to track personal expenses.
+* Individuals seeking a simple and lightweight budget tracking solution.
+* Users with basic financial literacy who prefer an easy-to-use mobile app.
 
 ---
 
