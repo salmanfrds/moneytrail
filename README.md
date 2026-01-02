@@ -142,8 +142,20 @@ graph TD
     H -- Click Logout --> K[Logout & Return to Login]
 ```
 
-## k) Reference
-### Next Steps for you:
-1.  **Copy** the code above into a file named `README.md` in your GitHub repository.
-2.  **Take Screenshots:** Run your provided code in an emulator, take screenshots of the Login, Dashboard, and Add Transaction screens, and upload them to your repo. Replace the `` lines with the actual image links (e.g., `![Login Screen](assets/login.png)`).
-3.  **Fill in Members:** Don't forget to update the table in section (a) with your actual group details.
+## k) References & Documentation
+
+This project is built using the **Flutter** framework and **Firebase** services. For further information on the technologies used, refer to the following official documentation:
+
+### Flutter Core
+* **[Flutter Documentation](https://docs.flutter.dev/):** The primary source for Flutter development, including widgets, state management, and navigation.
+* **[Dart Language Guide](https://dart.dev/guides):** Detailed documentation on the Dart programming language.
+
+### Firebase Integration
+* **[Firebase for Flutter Guide](https://firebase.google.com/docs/flutter/setup):** Official guide on connecting Flutter apps to Firebase projects.
+* **[Cloud Firestore](https://firebase.google.com/docs/firestore):** Documentation for the NoSQL database used for real-time data storage.
+* **[Firebase Authentication](https://firebase.google.com/docs/auth):** Implementation details for user login and security.
+
+### Tools & Packages
+* **[Pub.dev](https://pub.dev/):** The official package repository for Dart and Flutter (used for searching plugins like `firebase_core`, `cloud_firestore`, etc.).
+
+---
