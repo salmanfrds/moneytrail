@@ -5,7 +5,7 @@
 | :--- | :--- |
 | **Firdaus Muhammad Salman** | 2223281 |
 | Siti Hajar 'Aainaa Binti Hamid | 2218648 |
-| [Member 3 Name] | [Matric No] |
+| Muhammad Aqil bin Suhazi Reza | 2222987 |
 
 ## b) Project Title
 **MoneyTrail: A Personal Budget Tracking Mobile Application**
