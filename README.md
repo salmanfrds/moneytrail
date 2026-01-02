@@ -85,12 +85,12 @@ The user profile screen allows for personal data management and application sett
 ### Component Structure
 The app follows a standard Flutter composition pattern:
 * **`MyApp` (Root):** Handles routing and theming (`Material3`, `Colors.indigo`).
-* **`MainContainerPage`:** Acts as the shell for the application, maintaining the `BottomNavigationBar` state.
+* **`MainContainerPage`:** Acts as the shell for the application, maintaining the `BottomNavigationBar` state. Switches between core feature pages without rebuilding the entire app
 * **Feature Widgets:** `DashboardPage`, `HistoryPage`, `AddTransactionPage`, `ProfilePage`.
 
 ### State Management
-* **Current Prototype:** We are currently using `setState` for local widget UI updates and a **Singleton Pattern (`DataStore`)** to mock a global database and share state between pages.
-* **Final Implementation:** We plan to migrate to **Riverpod** or **Provider** for more robust state management to handle asynchronous Firebase streams and separate business logic from UI code.
+* **Current Prototype:** We are currently using `setState` for local widget UI updates and a **Singleton Pattern (`DataStore`)** to mock a global database and share state between pages. Suitable for early-stage prototyping and UI validation
+* **Final Implementation:** We plan to migrate to **Riverpod** or **Provider** for more robust state management to handle asynchronous Firebase streams and separate business logic from UI code. Also Improved scalability as features grow.
 
 ---
 
@@ -112,13 +112,19 @@ We will use a Collection-Document structure in Firebase:
 
 * **Collection:** `users`
     * **Document:** `uid` (User's ID)
+        * **String** `name`
+        * **String** `email`
         * **Sub-collection:** `transactions`
             * **Document:** `transaction_id`
                 * `title`: "Lunch"
                 * `amount`: 15.50
                 * `type`: "expense"
                 * `created_at`: Timestamp
-
+### Design Rationale:
+* User data is isolated per uid
+* Transactions are scoped to each user
+* Supports scalability and secure access rules
+* Compatible with Firebase Authentication integration
 ---
 
 ## j) Flowchart / User Interaction
@@ -141,6 +147,11 @@ graph TD
     G -- Swipe Item --> J[Delete Transaction]
     H -- Click Logout --> K[Logout & Return to Login]
 ```
+### Interaction Summary
+* Users must authenticate before accessing core features
+* Navigation is controlled via the Bottom Navigation Bar
+* Transactions can be added from anywhere using the FAB
+* Logout clears session and returns the user to the login screen
 
 ## k) References & Documentation
 
