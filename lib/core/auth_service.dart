@@ -1,12 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
+  final db = FirebaseFirestore.instance;
+
   Future<bool> createUser(String email, String password) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final credentials = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      if (credentials.additionalUserInfo!.isNewUser) {
+        await db.collection("users").doc(credentials.user!.uid).set({
+          "email": email,
+        });
+      }
+
       return true;
     } catch (e) {
       print("error $e");

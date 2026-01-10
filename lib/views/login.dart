@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneytrail/core/auth_service.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
         _passwordController.text,
       );
       if (success) {
-        Navigator.pushReplacementNamed(context, '/home');
+        context.go('/');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid email or password')),

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'provider/auth_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'firebase_options.dart';
 import 'views/view.dart';
-import 'views/signup.dart';
+import 'router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,16 +18,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'MoneyTrail',
       theme: ThemeData(primarySwatch: Colors.indigo, useMaterial3: true),
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/signup': (context) => const SignUpPage(),
-        '/home': (context) => const MainContainerPage(),
-        '/add': (context) => const AddTransactionPage(),
-      },
+      routerConfig: router,
     );
   }
 }
@@ -61,7 +58,7 @@ class _MainContainerPageState extends State<MainContainerPage> {
           ? FloatingActionButton(
               onPressed: () async {
                 // Navigate to Add Page and wait for result to refresh UI
-                await Navigator.pushNamed(context, '/add');
+                context.go('/add');
                 setState(() {});
               },
               child: const Icon(Icons.add),
