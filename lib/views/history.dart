@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moneytrail/core/core.dart';
+import 'package:moneytrail/services/services.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});

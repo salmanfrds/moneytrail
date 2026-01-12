@@ -58,7 +58,7 @@ class _MainContainerPageState extends State<MainContainerPage> {
           ? FloatingActionButton(
               onPressed: () async {
                 // Navigate to Add Page and wait for result to refresh UI
-                context.go('/add');
+                context.push('/add');
                 setState(() {});
               },
               child: const Icon(Icons.add),

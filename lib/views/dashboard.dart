@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moneytrail/core/core.dart';
+import 'package:moneytrail/services/services.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});

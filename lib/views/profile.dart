@@ -19,17 +19,40 @@ class ProfilePage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.indigo,
-              child: Icon(Icons.person, size: 50, color: Colors.white),
+            Stack(
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.indigo,
+                  child: Icon(Icons.person, size: 50, color: Colors.white),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.indigo, width: 2),
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.edit, color: Colors.indigo),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
 
-            // 2. Safety check: "Does the user exist? Do they have an email?"
+            const SizedBox(height: 20),
+            Text(
+              user?.displayName ?? "No Name", // If null, show "No Name"
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             Text(
               user?.email ?? "No Email", // If null, show "No Email"
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
             ),
 
             const SizedBox(height: 40),

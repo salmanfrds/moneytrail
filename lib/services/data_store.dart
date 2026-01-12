@@ -1,4 +1,4 @@
-import 'transaction_item.dart';
+import '../transaction_item.dart';
 
 class DataStore {
   static final DataStore _instance = DataStore._internal();

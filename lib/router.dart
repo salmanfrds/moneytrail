@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:moneytrail/views/view.dart';
-import 'main.dart';
 
 // GoRouter configuration
 final router = GoRouter(
