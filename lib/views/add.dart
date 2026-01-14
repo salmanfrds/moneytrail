@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moneytrail/services/services.dart';
-import 'package:moneytrail/transaction_item.dart';
+import 'package:moneytrail/models/transaction_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddTransactionPage extends StatefulWidget {
   const AddTransactionPage({super.key});
@@ -13,30 +14,85 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   bool _isExpense = true;
+  String? _selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    // Set default category if available
+    final categories = TransactionService().categories;
+    if (categories.isNotEmpty) {
+      _selectedCategory = categories.first;
+    }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
 
   void _saveTransaction() {
+    final user = FirebaseAuth.instance.currentUser;
     final title = _titleController.text;
     final amount = double.tryParse(_amountController.text);
 
-    if (title.isEmpty || amount == null) {
+    if (title.isEmpty ||
+        amount == null ||
+        (_isExpense && _selectedCategory == null)) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Please enter valid data')));
       return;
     }
 
-    final newItem = TransactionItem(
+    final newItem = TransactionModel(
       id: DateTime.now().toString(),
       title: title,
       amount: amount,
       isExpense: _isExpense,
       date: DateTime.now(),
+      category: _isExpense ? _selectedCategory! : "Income",
     );
 
     // Save to singleton list
-    DataStore().addTransaction(newItem);
+    TransactionService().addTransaction(user, newItem);
 
     Navigator.pop(context); // Return to previous screen
+  }
+
+  void _addNewCategory() {
+    final categoryController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Add Category"),
+        content: TextField(
+          controller: categoryController,
+          decoration: const InputDecoration(labelText: "Category Name"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              final newCat = categoryController.text.trim();
+              if (newCat.isNotEmpty) {
+                setState(() {
+                  TransactionService().addCategory(newCat);
+                  _selectedCategory = newCat;
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: const Text("Add"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -65,20 +121,71 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                 const Text("Type: ", style: TextStyle(fontSize: 16)),
                 const SizedBox(width: 10),
                 ChoiceChip(
-                  label: const Text("Expense"),
+                  label: Text(
+                    "Expense",
+                    style: TextStyle(
+                      color: _isExpense
+                          ? Colors.white
+                          : Theme.of(context).colorScheme.onSurface,
+                      fontWeight: _isExpense
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
                   selected: _isExpense,
                   onSelected: (val) => setState(() => _isExpense = true),
-                  selectedColor: Colors.red.shade100,
+                  selectedColor: Colors.indigo,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  side: BorderSide.none,
+                  checkmarkColor: Colors.white,
                 ),
                 const SizedBox(width: 10),
                 ChoiceChip(
-                  label: const Text("Income"),
+                  label: Text(
+                    "Income",
+                    style: TextStyle(
+                      color: !_isExpense
+                          ? Colors.white
+                          : Theme.of(context).colorScheme.onSurface,
+                      fontWeight: !_isExpense
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
                   selected: !_isExpense,
                   onSelected: (val) => setState(() => _isExpense = false),
-                  selectedColor: Colors.green.shade100,
+                  selectedColor: Colors.indigo,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  side: BorderSide.none,
+                  checkmarkColor: Colors.white,
                 ),
               ],
             ),
+            if (_isExpense) ...[
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedCategory,
+                      items: TransactionService().categories
+                          .map(
+                            (c) => DropdownMenuItem(value: c, child: Text(c)),
+                          )
+                          .toList(),
+                      onChanged: (val) =>
+                          setState(() => _selectedCategory = val),
+                      decoration: const InputDecoration(labelText: "Category"),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: _addNewCategory,
+                    tooltip: "Add Category",
+                  ),
+                ],
+              ),
+            ],
             const Spacer(),
             SizedBox(
               width: double.infinity,

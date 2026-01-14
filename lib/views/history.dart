@@ -1,56 +1,243 @@
 import 'package:flutter/material.dart';
-import 'package:moneytrail/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:moneytrail/provider/providers.dart';
+import 'package:moneytrail/models/transaction_model.dart';
 
-class HistoryPage extends StatefulWidget {
+class HistoryPage extends ConsumerStatefulWidget {
   const HistoryPage({super.key});
 
   @override
-  State<HistoryPage> createState() => _HistoryPageState();
+  ConsumerState<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage> {
-  void _deleteItem(String id) {
-    setState(() {
-      DataStore().removeTransaction(id);
-    });
-  }
+class _HistoryPageState extends ConsumerState<HistoryPage> {
+  DateTime _selectedDate = DateTime.now();
+  String? _selectedCategory;
 
   @override
   Widget build(BuildContext context) {
-    final transactions = DataStore().transactions;
+    AsyncValue<List<TransactionModel>> allTransactions = ref.watch(
+      transactionProvider,
+    );
 
     return Scaffold(
-      appBar: AppBar(title: const Text("History")),
-      body: transactions.isEmpty
-          ? const Center(child: Text("No history available"))
-          : ListView.builder(
-              itemCount: transactions.length,
-              itemBuilder: (context, index) {
-                final item = transactions[index];
-                return Dismissible(
-                  key: Key(item.id),
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 20),
-                    child: const Icon(Icons.delete, color: Colors.white),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: const Text("History"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      body: allTransactions.when(
+        data: (transactions) {
+          // 1. Extract available categories
+          final categories = transactions
+              .map((e) => e.category)
+              .toSet()
+              .toList();
+          categories.sort();
+
+          // 2. Filter transactions
+          final filteredTransactions = transactions.where((t) {
+            final matchMonth =
+                t.date.year == _selectedDate.year &&
+                t.date.month == _selectedDate.month;
+            final matchCategory =
+                _selectedCategory == null || t.category == _selectedCategory;
+            return matchMonth && matchCategory;
+          }).toList();
+
+          return Column(
+            children: [
+              // Filter Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                      ),
+                    ],
                   ),
-                  onDismissed: (direction) => _deleteItem(item.id),
-                  child: ListTile(
-                    leading: Icon(
-                      item.isExpense ? Icons.remove_circle : Icons.add_circle,
-                      color: item.isExpense ? Colors.red : Colors.green,
-                    ),
-                    title: Text(item.title),
-                    subtitle: Text(item.date.toString().substring(0, 10)),
-                    trailing: Text(
-                      "\$${item.amount}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  child: Column(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Filters",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              icon: const Icon(Icons.calendar_today, size: 18),
+                              label: Text(
+                                "${_selectedDate.month}/${_selectedDate.year}",
+                              ),
+                              onPressed: () async {
+                                final picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: _selectedDate,
+                                  firstDate: DateTime(2020),
+                                  lastDate: DateTime.now(),
+                                  initialDatePickerMode: DatePickerMode.year,
+                                );
+                                if (picked != null) {
+                                  setState(() {
+                                    _selectedDate = picked;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 0,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              isExpanded: true,
+                              value: _selectedCategory,
+                              hint: const Text("Category"),
+                              items: [
+                                const DropdownMenuItem(
+                                  value: null,
+                                  child: Text("All"),
+                                ),
+                                ...categories.map(
+                                  (c) => DropdownMenuItem(
+                                    value: c,
+                                    child: Text(c),
+                                  ),
+                                ),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedCategory = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              ),
+              // Transaction List
+              Expanded(
+                child: filteredTransactions.isEmpty
+                    ? const Center(
+                        child: Text("No transactions found for this filter"),
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: filteredTransactions.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final item = filteredTransactions[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: item.isExpense
+                                      ? Colors.red.withOpacity(0.1)
+                                      : Colors.green.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  item.isExpense
+                                      ? Icons.arrow_downward_rounded
+                                      : Icons.arrow_upward_rounded,
+                                  color: item.isExpense
+                                      ? Colors.red
+                                      : Colors.green,
+                                ),
+                              ),
+                              title: Text(
+                                item.title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                              ),
+                              subtitle: Text(
+                                "${item.category} • ${item.date.toString().substring(0, 10)}",
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withOpacity(0.6),
+                                ),
+                              ),
+                              trailing: Text(
+                                "${item.isExpense ? '-' : '+'} RM${item.amount.toStringAsFixed(2)}",
+                                style: TextStyle(
+                                  color: item.isExpense
+                                      ? Colors.red
+                                      : Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(child: Text(error.toString())),
+      ),
     );
   }
 }

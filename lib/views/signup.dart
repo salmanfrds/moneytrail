@@ -1,4 +1,4 @@
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:moneytrail/services/auth_service.dart';
@@ -15,15 +15,29 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   void _handleSignUp() async {
+    setState(() {
+      isLoading = true;
+    });
     if (_formKey.currentState!.validate()) {
       try {
-        await AuthService().createUser(
+        final success = await AuthService().createUser(
           _emailController.text,
           _passwordController.text,
         );
-        context.go('/login'); // Go back to login or could go to home
+        if (!mounted) return;
+        if (success) {
+          context.go('/'); // Go back to login or could go to home
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Account created! Please login.')),
         );
@@ -31,6 +45,10 @@ class _SignUpPageState extends State<SignUpPage> {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(e.toString())));
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }
@@ -40,17 +58,17 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigo.shade50,
+      // backgroundColor: Colors.indigo.shade50,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 FontAwesomeIcons.userPlus,
                 size: 80,
-                color: Colors.indigo,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(height: 20),
               const Text(
@@ -74,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Theme.of(context).cardColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
@@ -85,8 +103,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.indigo,
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
                             width: 2,
                           ),
                         ),
@@ -108,7 +126,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       obscureText: true,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Theme.of(context).cardColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
@@ -119,8 +137,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.indigo,
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
                             width: 2,
                           ),
                         ),
@@ -134,27 +152,29 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: ElevatedButton(
                         onPressed: _handleSignUp,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigo,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           foregroundColor: Colors.white,
                           elevation: 2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "SIGN UP",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        child: isLoading
+                            ? CircularProgressIndicator(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              )
+                            : Text(
+                                "SIGN UP",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 8),
-                            Icon(FontAwesomeIcons.userPlus, size: 18),
-                          ],
-                        ),
                       ),
                     ),
                   ],
@@ -163,7 +183,7 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  context.go('/login');
+                  context.go('/');
                 },
                 child: const Text(
                   "Already have an account? Login",
