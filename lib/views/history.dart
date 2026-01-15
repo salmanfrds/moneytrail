@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moneytrail/provider/providers.dart';
 import 'package:moneytrail/models/transaction_model.dart';
+import 'package:moneytrail/views/add.dart';
+import 'package:moneytrail/services/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HistoryPage extends ConsumerStatefulWidget {
   const HistoryPage({super.key});
@@ -217,15 +220,86 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                                   ).colorScheme.onSurface.withOpacity(0.6),
                                 ),
                               ),
-                              trailing: Text(
-                                "${item.isExpense ? '-' : '+'} RM${item.amount.toStringAsFixed(2)}",
-                                style: TextStyle(
-                                  color: item.isExpense
-                                      ? Colors.red
-                                      : Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "${item.isExpense ? '-' : '+'} RM${item.amount.toStringAsFixed(2)}",
+                                    style: TextStyle(
+                                      color: item.isExpense
+                                          ? Colors.red
+                                          : Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  PopupMenuButton<String>(
+                                    icon: Icon(
+                                      Icons.more_vert,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface,
+                                    ),
+                                    onSelected: (value) async {
+                                      if (value == 'edit') {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => AddTransactionPage(
+                                              transactionToEdit: item,
+                                            ),
+                                          ),
+                                        );
+                                      } else if (value == 'delete') {
+                                        final confirm = await showDialog<bool>(
+                                          context: context,
+                                          builder: (ctx) => AlertDialog(
+                                            title: const Text(
+                                              "Delete Transaction",
+                                            ),
+                                            content: const Text(
+                                              "Are you sure you want to delete this transaction?",
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                child: const Text("Cancel"),
+                                                onPressed: () =>
+                                                    Navigator.pop(ctx, false),
+                                              ),
+                                              TextButton(
+                                                child: const Text(
+                                                  "Delete",
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                onPressed: () =>
+                                                    Navigator.pop(ctx, true),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+
+                                        if (confirm == true) {
+                                          final user =
+                                              FirebaseAuth.instance.currentUser;
+                                          await TransactionService()
+                                              .deleteTransaction(user, item.id);
+                                        }
+                                      }
+                                    },
+                                    itemBuilder: (context) => [
+                                      const PopupMenuItem(
+                                        value: 'edit',
+                                        child: Text('Edit'),
+                                      ),
+                                      const PopupMenuItem(
+                                        value: 'delete',
+                                        child: Text('Delete'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           );

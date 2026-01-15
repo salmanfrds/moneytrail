@@ -4,7 +4,8 @@ import 'package:moneytrail/models/transaction_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AddTransactionPage extends StatefulWidget {
-  const AddTransactionPage({super.key});
+  final TransactionModel? transactionToEdit;
+  const AddTransactionPage({super.key, this.transactionToEdit});
 
   @override
   State<AddTransactionPage> createState() => _AddTransactionPageState();
@@ -19,10 +20,20 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   @override
   void initState() {
     super.initState();
-    // Set default category if available
-    final categories = TransactionService().categories;
-    if (categories.isNotEmpty) {
-      _selectedCategory = categories.first;
+    // Check if we are editing
+    if (widget.transactionToEdit != null) {
+      final t = widget.transactionToEdit!;
+      _titleController.text = t.title;
+      _amountController.text = t.amount
+          .toString(); // or toStringAsFixed if needed
+      _isExpense = t.isExpense;
+      _selectedCategory = t.category;
+    } else {
+      // Set default category if available
+      final categories = TransactionService().categories;
+      if (categories.isNotEmpty) {
+        _selectedCategory = categories.first;
+      }
     }
   }
 
@@ -47,17 +58,32 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       return;
     }
 
-    final newItem = TransactionModel(
-      id: DateTime.now().toString(),
-      title: title,
-      amount: amount,
-      isExpense: _isExpense,
-      date: DateTime.now(),
-      category: _isExpense ? _selectedCategory! : "Income",
-    );
-
-    // Save to singleton list
-    TransactionService().addTransaction(user, newItem);
+    if (widget.transactionToEdit != null) {
+      // Update existing
+      final updatedItem = TransactionModel(
+        id: widget.transactionToEdit!.id, // Keep same ID
+        title: title,
+        amount: amount,
+        isExpense: _isExpense,
+        date: widget
+            .transactionToEdit!
+            .date, // Keep original date? Or update? usually keep.
+        category: _isExpense ? _selectedCategory! : "Income",
+      );
+      TransactionService().updateTransaction(user, updatedItem);
+    } else {
+      // Create new
+      final newItem = TransactionModel(
+        id: DateTime.now().toString(),
+        title: title,
+        amount: amount,
+        isExpense: _isExpense,
+        date: DateTime.now(),
+        category: _isExpense ? _selectedCategory! : "Income",
+      );
+      // Save to singleton list
+      TransactionService().addTransaction(user, newItem);
+    }
 
     Navigator.pop(context); // Return to previous screen
   }
@@ -98,7 +124,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Add Transaction")),
+      appBar: AppBar(
+        title: Text(
+          widget.transactionToEdit != null
+              ? "Edit Transaction"
+              : "Add Transaction",
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

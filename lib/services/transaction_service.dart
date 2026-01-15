@@ -28,6 +28,33 @@ class TransactionService {
         .add(item.toMap());
   }
 
+  Future<void> deleteTransaction(User? user, String transactionId) async {
+    final querySnapshot = await usersCollection
+        .doc(user!.uid)
+        .collection('transactions')
+        .where('id', isEqualTo: transactionId)
+        .get();
+
+    for (var doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+  }
+
+  Future<void> updateTransaction(
+    User? user,
+    TransactionModel transaction,
+  ) async {
+    final querySnapshot = await usersCollection
+        .doc(user!.uid)
+        .collection('transactions')
+        .where('id', isEqualTo: transaction.id)
+        .get();
+
+    for (var doc in querySnapshot.docs) {
+      await doc.reference.update(transaction.toMap());
+    }
+  }
+
   Stream<List<TransactionModel>> getTransactions(User? user) {
     if (user == null) return Stream.value([]);
 
