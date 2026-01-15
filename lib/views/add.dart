@@ -27,7 +27,18 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       _amountController.text = t.amount
           .toString(); // or toStringAsFixed if needed
       _isExpense = t.isExpense;
-      _selectedCategory = t.category;
+
+      // Validate category
+      final categories = TransactionService().categories;
+      if (_isExpense) {
+        if (categories.contains(t.category)) {
+          _selectedCategory = t.category;
+        } else if (categories.isNotEmpty) {
+          _selectedCategory = categories.first;
+        }
+      } else {
+        _selectedCategory = "Income";
+      }
     } else {
       // Set default category if available
       final categories = TransactionService().categories;
@@ -165,7 +176,19 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     ),
                   ),
                   selected: _isExpense,
-                  onSelected: (val) => setState(() => _isExpense = true),
+                  onSelected: (val) {
+                    setState(() {
+                      _isExpense = true;
+                      // Ensure valid category for Expense
+                      final categories = TransactionService().categories;
+                      if (_selectedCategory == "Income" ||
+                          !categories.contains(_selectedCategory)) {
+                        if (categories.isNotEmpty) {
+                          _selectedCategory = categories.first;
+                        }
+                      }
+                    });
+                  },
                   selectedColor: Colors.indigo,
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   side: BorderSide.none,
