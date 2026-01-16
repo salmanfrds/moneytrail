@@ -92,6 +92,11 @@ The app follows a standard Flutter composition pattern:
 * **Current Prototype:** We are currently using `setState` for local widget UI updates and a **Singleton Pattern (`DataStore`)** to mock a global database and share state between pages. Suitable for early-stage prototyping and UI validation
 * **Final Implementation:** We plan to migrate to **Riverpod** or **Provider** for more robust state management to handle asynchronous Firebase streams and separate business logic from UI code. Also Improved scalability as features grow.
 
+### Technical
+- services folder, containing all logics
+- ⁠models, containing Object classes
+- ⁠provider, global state management such as user state and darkmode state using riverpod
+  
 ---
 
 ## i) Data Model
@@ -153,7 +158,26 @@ graph TD
 * Transactions can be added from anywhere using the FAB
 * Logout clears session and returns the user to the login screen
 
-## k) References & Documentation
+## K) Limitation and Future Enhancements
+
+###Limitations
+
+* Despite its usefulness, MoneyTrail has several limitations in its current version:
+* The application relies on manual data entry, which may lead to incomplete or inaccurate records if users forget to log transactions.
+* The reporting and visualization features are basic and may not provide advanced financial insights.
+* Budget limits and alerts are not fully automated, reducing proactive spending control.
+* The application is designed for individual use and does not support shared or family budgeting.
+
+###Future Enhancements
+
+* To improve functionality and user experience, several enhancements are proposed for future development:
+* Add budget limit notifications and alerts to warn users when spending exceeds predefined thresholds.
+* Introduce more advanced analytics such as monthly comparisons and spending trends.
+* Enable data export features (e.g., PDF or CSV reports) for personal record keeping.
+* Support multi-user or shared budgets for families or groups.
+* Integrate AI-based spending insights and recommendations for smarter financial planning.
+
+## L) References & Documentation
 
 This project is built using the **Flutter** framework and **Firebase** services. For further information on the technologies used, refer to the following official documentation:
 
