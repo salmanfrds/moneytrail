@@ -160,7 +160,7 @@ graph TD
 
 ## K) Limitation and Future Enhancements
 
-###Limitations
+### Limitations
 
 * Despite its usefulness, MoneyTrail has several limitations in its current version:
 * The application relies on manual data entry, which may lead to incomplete or inaccurate records if users forget to log transactions.
@@ -168,7 +168,7 @@ graph TD
 * Budget limits and alerts are not fully automated, reducing proactive spending control.
 * The application is designed for individual use and does not support shared or family budgeting.
 
-###Future Enhancements
+### Future Enhancements
 
 * To improve functionality and user experience, several enhancements are proposed for future development:
 * Add budget limit notifications and alerts to warn users when spending exceeds predefined thresholds.
