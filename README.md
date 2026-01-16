@@ -65,18 +65,18 @@ This section describes the user entry points (Login and Signup) as well as the m
 | ![Login Screen](https://github.com/user-attachments/assets/5bd023b5-99da-416a-8f4d-1634426da15f) ![Signup Screen](https://github.com/user-attachments/assets/a619446c-0c64-4d00-9ab5-95ab0e237281) |![Dashboard1](https://github.com/user-attachments/assets/b1a2c708-b17b-4c3b-9e3a-43f35976a154) ![Dasboard2](https://github.com/user-attachments/assets/a90dd246-995f-4aca-b622-e430c56a21a3) |
 
 ### 2. Core Features (Transactions)
-Users can efficiently add new data and review their full history through these interfaces.
+Users can efficiently add new transactions, whether expenses or income. Expenses can be organized into customizable categories, allowing users to tailor the system to their needs. Through these interfaces, users can review their complete transaction history and apply filters to view past transactions based on their preferred time period.
 
 | Add Transaction | Transaction History |
 | :---: | :---: |
-| ![Add Transaction](prototype/add.png) | ![History Screen](prototype/history.png) |
+| ![expense](https://github.com/user-attachments/assets/a79de454-ac87-4fec-a2a1-02323a65573e) ![Income](https://github.com/user-attachments/assets/6354a139-7fdb-4560-8e49-c928f049ba03) | ![History](https://github.com/user-attachments/assets/45307e60-98d3-4478-acf4-29651be17d0c) |
 
 ### 3. Account Management
 The user profile screen allows for personal data management and application settings.
 
 | User Profile |
 | :---: |
-| ![User Profile](prototype/user.png) |
+| ![![User profile](https://github.com/user-attachments/assets/60a8396a-c639-4a89-b473-283b09eb80ad) |
 
 ---
 
