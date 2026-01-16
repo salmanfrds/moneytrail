@@ -7,6 +7,7 @@ class TransactionModel {
   final bool isExpense;
   final DateTime date;
   final String category;
+  final String? receiptUrl;
 
   TransactionModel({
     required this.id,
@@ -15,6 +16,7 @@ class TransactionModel {
     required this.isExpense,
     required this.date,
     required this.category,
+    this.receiptUrl,
   });
 
   factory TransactionModel.fromMap(Map<String, dynamic> map) {
@@ -25,6 +27,7 @@ class TransactionModel {
       isExpense: map['isExpense'],
       date: (map['date'] as Timestamp).toDate(),
       category: map['category'],
+      receiptUrl: map['receiptUrl'],
     );
   }
 
@@ -36,6 +39,7 @@ class TransactionModel {
       'isExpense': isExpense,
       'date': date,
       'category': category,
+      'receiptUrl': receiptUrl,
     };
   }
 }

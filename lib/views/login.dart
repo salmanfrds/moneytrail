@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isLoadingGoogle = false;
     });
+    if (!mounted) return;
     success
         ? context.go('/')
         : ScaffoldMessenger.of(context).showSnackBar(

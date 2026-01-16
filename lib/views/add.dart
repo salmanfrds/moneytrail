@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:moneytrail/services/services.dart';
 import 'package:moneytrail/models/transaction_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AddTransactionPage extends StatefulWidget {
   final TransactionModel? transactionToEdit;
@@ -16,6 +19,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   final _amountController = TextEditingController();
   bool _isExpense = true;
   String? _selectedCategory;
+  File? _receiptImage;
 
   @override
   void initState() {
@@ -48,6 +52,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _receiptImage = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -55,10 +69,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     super.dispose();
   }
 
-  void _saveTransaction() {
+  Future<void> _saveTransaction() async {
     final user = FirebaseAuth.instance.currentUser;
     final title = _titleController.text;
     final amount = double.tryParse(_amountController.text);
+    String? receiptUrl = widget.transactionToEdit?.receiptUrl;
 
     if (title.isEmpty ||
         amount == null ||
@@ -67,6 +82,22 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         context,
       ).showSnackBar(const SnackBar(content: Text('Please enter valid data')));
       return;
+    }
+
+    // Upload receipt if selected
+    if (_receiptImage != null) {
+      try {
+        final ref = FirebaseStorage.instance.ref().child(
+          "users/${user!.uid}/receipts/${DateTime.now().millisecondsSinceEpoch}_${_receiptImage!.path.split('/').last}",
+        );
+        await ref.putFile(_receiptImage!);
+        receiptUrl = await ref.getDownloadURL();
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error uploading image: $e')));
+        return;
+      }
     }
 
     if (widget.transactionToEdit != null) {
@@ -80,6 +111,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             .transactionToEdit!
             .date, // Keep original date? Or update? usually keep.
         category: _isExpense ? _selectedCategory! : "Income",
+        receiptUrl: receiptUrl,
       );
       TransactionService().updateTransaction(user, updatedItem);
     } else {
@@ -91,6 +123,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         isExpense: _isExpense,
         date: DateTime.now(),
         category: _isExpense ? _selectedCategory! : "Income",
+        receiptUrl: receiptUrl,
       );
       // Save to singleton list
       TransactionService().addTransaction(user, newItem);
@@ -222,7 +255,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: _selectedCategory,
+                      initialValue: _selectedCategory,
                       items: TransactionService().categories
                           .map(
                             (c) => DropdownMenuItem(value: c, child: Text(c)),
@@ -240,6 +273,39 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
+              if (_receiptImage != null)
+                Column(
+                  children: [
+                    Image.file(_receiptImage!, height: 100),
+                    TextButton(
+                      onPressed: _pickImage,
+                      child: const Text("Change Receipt"),
+                    ),
+                  ],
+                )
+              else if (widget.transactionToEdit?.receiptUrl != null)
+                Column(
+                  children: [
+                    Image.network(
+                      widget.transactionToEdit!.receiptUrl!,
+                      height: 100,
+                    ),
+                    TextButton(
+                      onPressed: _pickImage,
+                      child: const Text("Change Receipt"),
+                    ),
+                  ],
+                )
+              else
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigo,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text("Add Receipt"),
+                ),
             ],
             const Spacer(),
             SizedBox(

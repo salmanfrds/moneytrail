@@ -70,7 +70,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 10,
                       ),
                     ],
@@ -133,7 +133,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                                 ),
                               ),
                               isExpanded: true,
-                              value: _selectedCategory,
+                              initialValue: _selectedCategory,
                               hint: const Text("Category"),
                               items: [
                                 const DropdownMenuItem(
@@ -179,19 +179,60 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
+                                  color: Colors.black.withValues(alpha: 0.05),
                                   blurRadius: 5,
                                   offset: const Offset(0, 2),
                                 ),
                               ],
                             ),
                             child: ListTile(
+                              onTap: () {
+                                if (item.receiptUrl != null &&
+                                    item.receiptUrl!.isNotEmpty) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      contentPadding: EdgeInsets.zero,
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              Image.network(item.receiptUrl!),
+                                              Positioned(
+                                                right: 0,
+                                                top: 0,
+                                                child: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                  ),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "No receipt available for this transaction",
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: item.isExpense
-                                      ? Colors.red.withOpacity(0.1)
-                                      : Colors.green.withOpacity(0.1),
+                                      ? Colors.red.withValues(alpha: 0.1)
+                                      : Colors.green.withValues(alpha: 0.1),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
@@ -215,9 +256,8 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                               subtitle: Text(
                                 "${item.category} • ${item.date.toString().substring(0, 10)}",
                                 style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface.withOpacity(0.6),
+                                  color: Theme.of(context).colorScheme.onSurface
+                                      .withValues(alpha: 0.6),
                                 ),
                               ),
                               trailing: Row(

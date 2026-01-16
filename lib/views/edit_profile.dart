@@ -46,7 +46,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         });
       }
     } catch (e) {
-      print("Picker Error: $e");
+      debugPrint("Picker Error: $e");
     }
   }
 
@@ -97,7 +97,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         Navigator.pop(context); // Go back to profile page
       }
     } catch (e) {
-      print("Save Error: $e");
+      debugPrint("Save Error: $e");
       if (mounted) {
         ScaffoldMessenger.of(
           context,

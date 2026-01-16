@@ -47,7 +47,7 @@ class DashboardPage extends ConsumerWidget {
 
           // Calculate Pie Chart Data (Expense by Category)
           final expenseTransactions = transactions
-              .where((t) => t.isExpense)
+              .where((t) => t.isExpense && t.amount > 0)
               .toList();
           final Map<String, double> categoryExpenses = {};
           for (var t in expenseTransactions) {
@@ -55,11 +55,14 @@ class DashboardPage extends ConsumerWidget {
                 (categoryExpenses[t.category] ?? 0) + t.amount;
           }
 
+          final sortedCategories = categoryExpenses.keys.toList()..sort();
+
           final List<PieChartSectionData> pieSections = [];
-          int colorIndex = 0;
-          categoryExpenses.forEach((key, value) {
-            final color =
-                Colors.primaries[colorIndex % Colors.primaries.length];
+
+          for (int i = 0; i < sortedCategories.length; i++) {
+            final category = sortedCategories[i];
+            final value = categoryExpenses[category]!;
+            final color = Colors.primaries[i % Colors.primaries.length];
             final percentage = totalExpense > 0
                 ? (value / totalExpense * 100)
                 : 0.0;
@@ -89,8 +92,7 @@ class DashboardPage extends ConsumerWidget {
                 badgePositionPercentageOffset: 0.98,
               ),
             );
-            colorIndex++;
-          });
+          }
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -111,7 +113,7 @@ class DashboardPage extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.indigo.withOpacity(0.3),
+                          color: Colors.indigo.withValues(alpha: 0.3),
                           blurRadius: 10,
                           offset: const Offset(0, 5),
                         ),
@@ -159,16 +161,25 @@ class DashboardPage extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 10,
                           ),
                         ],
                       ),
                       child: Column(
                         children: [
+                          Text(
+                            "Expense Distribution",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
                           SizedBox(
                             height: 200,
                             child: PieChart(
+                              key: ValueKey(pieSections.length),
                               PieChartData(
                                 sections: pieSections,
                                 sectionsSpace: 2,
@@ -180,19 +191,22 @@ class DashboardPage extends ConsumerWidget {
                           Wrap(
                             spacing: 8,
                             runSpacing: 8,
-                            children: categoryExpenses.entries.map((e) {
-                              final index = categoryExpenses.keys
-                                  .toList()
-                                  .indexOf(e.key);
+                            children: sortedCategories.asMap().entries.map((
+                              entry,
+                            ) {
+                              final index = entry.key;
+                              final category = entry.value;
+                              final value = categoryExpenses[category]!;
                               final color = Colors
                                   .primaries[index % Colors.primaries.length];
+
                               return Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: color,
                                   radius: 5,
                                 ),
                                 label: Text(
-                                  "${e.key} (RM${e.value.toStringAsFixed(0)})",
+                                  "$category (RM${value.toStringAsFixed(0)})",
                                   style: TextStyle(
                                     color: Theme.of(
                                       context,
@@ -230,7 +244,7 @@ class DashboardPage extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 10,
                           ),
                         ],
@@ -327,7 +341,7 @@ class DashboardPage extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
+                                    color: Colors.black.withValues(alpha: 0.05),
                                     blurRadius: 5,
                                     offset: const Offset(0, 2),
                                   ),
@@ -338,8 +352,8 @@ class DashboardPage extends ConsumerWidget {
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: item.isExpense
-                                        ? Colors.red.withOpacity(0.1)
-                                        : Colors.green.withOpacity(0.1),
+                                        ? Colors.red.withValues(alpha: 0.1)
+                                        : Colors.green.withValues(alpha: 0.1),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
@@ -363,9 +377,10 @@ class DashboardPage extends ConsumerWidget {
                                 subtitle: Text(
                                   item.category,
                                   style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface.withOpacity(0.6),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.6),
                                   ),
                                 ),
                                 trailing: Text(
