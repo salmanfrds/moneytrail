@@ -65,7 +65,7 @@ This section describes the user entry points (Login and Signup) as well as the m
 | ![Login Screen](https://github.com/user-attachments/assets/5bd023b5-99da-416a-8f4d-1634426da15f) ![Signup Screen](https://github.com/user-attachments/assets/a619446c-0c64-4d00-9ab5-95ab0e237281) |![Dashboard1](https://github.com/user-attachments/assets/b1a2c708-b17b-4c3b-9e3a-43f35976a154) ![Dasboard2](https://github.com/user-attachments/assets/a90dd246-995f-4aca-b622-e430c56a21a3) |
 
 ### 2. Core Features (Transactions)
-Users can efficiently add new transactions, whether expenses or income. Expenses can be organized into customizable categories, allowing users to tailor the system to their needs. Through these interfaces, users can review their complete transaction history and apply filters to view past transactions based on their preferred time period.
+Users can efficiently add new transactions, whether expenses or income. Expenses can be organized into customizable categories, allowing users to tailor the system to their needs and user also can upload tey receipt. Through these interfaces, users can review their complete transaction history and apply filters to view past transactions based on their preferred time period.
 
 | Add Transaction | Transaction History |
 | :---: | :---: |
