@@ -58,11 +58,11 @@ MoneyTrail is a mobile budget tracker application designed to help users monitor
 *> Note: Please refer to the `prototype/` folder for the actual high-resolution screen captures.*
 
 ### 1. Authentication & Dashboard
-This section covers the user entry point and the main landing screen of the application.
+This section describes the user entry points (Login and Signup) as well as the main landing screen of the application, which presents an overview of the user’s current money flow, visualized through financial charts, along with a summary of recent activities.
 
-| Login Screen | Homepage / Dashboard |
+| Login & Signup Screen | Homepage / Dashboard |
 | :---: | :---: |
-| ![Login Screen](https://github.com/user-attachments/assets/5bd023b5-99da-416a-8f4d-1634426da15f) | ![Homepage](prototype/homepage.png) |
+| ![Login Screen](https://github.com/user-attachments/assets/5bd023b5-99da-416a-8f4d-1634426da15f) ![Signup Screen](https://github.com/user-attachments/assets/a619446c-0c64-4d00-9ab5-95ab0e237281) |![Dashboard1](https://github.com/user-attachments/assets/b1a2c708-b17b-4c3b-9e3a-43f35976a154) ![Dasboard2](https://github.com/user-attachments/assets/a90dd246-995f-4aca-b622-e430c56a21a3) |
 
 ### 2. Core Features (Transactions)
 Users can efficiently add new data and review their full history through these interfaces.
