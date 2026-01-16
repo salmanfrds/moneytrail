@@ -69,7 +69,7 @@ Users can efficiently add new transactions, whether expenses or income. Expenses
 
 | Add Transaction | Transaction History |
 | :---: | :---: |
-| ![expense](https://github.com/user-attachments/assets/a79de454-ac87-4fec-a2a1-02323a65573e) ![Income](https://github.com/user-attachments/assets/6354a139-7fdb-4560-8e49-c928f049ba03) | ![History](https://github.com/user-attachments/assets/45307e60-98d3-4478-acf4-29651be17d0c) |
+|![expenses](https://github.com/user-attachments/assets/6944b1ea-735f-47d6-97d9-6f76b1a38bbc) ![Income](https://github.com/user-attachments/assets/6354a139-7fdb-4560-8e49-c928f049ba03) | ![History](https://github.com/user-attachments/assets/45307e60-98d3-4478-acf4-29651be17d0c) |
 
 ### 3. Account Management
 The user profile screen allows for personal data management and application settings.
