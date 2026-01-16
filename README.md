@@ -62,7 +62,7 @@ This section covers the user entry point and the main landing screen of the appl
 
 | Login Screen | Homepage / Dashboard |
 | :---: | :---: |
-| ![Login Screen](![Image](https://github.com/user-attachments/assets/5bd023b5-99da-416a-8f4d-1634426da15f)) | ![Homepage](prototype/homepage.png) |
+| ![Login Screen](https://github.com/user-attachments/assets/5bd023b5-99da-416a-8f4d-1634426da15f) | ![Homepage](prototype/homepage.png) |
 
 ### 2. Core Features (Transactions)
 Users can efficiently add new data and review their full history through these interfaces.
