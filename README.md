@@ -189,6 +189,7 @@ This project is built using the **Flutter** framework and **Firebase** services.
 * **[Firebase for Flutter Guide](https://firebase.google.com/docs/flutter/setup):** Official guide on connecting Flutter apps to Firebase projects.
 * **[Cloud Firestore](https://firebase.google.com/docs/firestore):** Documentation for the NoSQL database used for real-time data storage.
 * **[Firebase Authentication](https://firebase.google.com/docs/auth):** Implementation details for user login and security.
+* **[Firebase Storage](https://firebase.google.com/docs/storage):** Allows uploading of files quickly and easily.
 
 ### Tools & Packages
 * **[Pub.dev](https://pub.dev/):** The official package repository for Dart and Flutter (used for searching plugins like `firebase_core`, `cloud_firestore`, etc.).
