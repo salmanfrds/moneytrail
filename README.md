@@ -3,7 +3,7 @@
 ## a) Group Members
 | Name | Matric Number |
 | :--- | :--- |
-| **Firdaus Muhammad Salman** | 2223281 |
+| Firdaus Muhammad Salman | 2223281 |
 | Siti Hajar 'Aainaa Binti Hamid | 2218648 |
 | Muhammad Aqil bin Suhazi Reza | 2222987 |
 
@@ -36,21 +36,24 @@ MoneyTrail is a mobile budget tracker application designed to help users monitor
 
 ---
 
-## f) Features and Functionalities
+## f) Summary of Achieved Features
 
 ### Core Modules
-1.  **Authentication:** Secure Login/Logout (Mock implementation currently, moving to Firebase Auth).
-2.  **Dashboard:** Real-time view of Total Balance and the 5 most recent transactions.
-3.  **Transaction Management:** * Add new Income or Expense.
-    * Categorize transactions (Title/Type).
-    * Delete erroneous entries.
-4.  **History Log:** Scrollable list of all past transactions.
+1.  **Authentication:** Secure Login and Signup using **Firebase Authentication**.
+2.  **Dashboard:** Real-time view of Total Balance and recent transactions.
+3.  **Transaction Management:**
+    *   Add new Income or Expense with custom categories.
+    *   **Receipts:** Upload and view images (receipts) for transactions (stored in **Firebase Storage**).
+    *   **Edit/Delete:** Modify or remove existing transactions.
+4.  **History & Analytics:**
+    *   Scrollable list of all past transactions.
+    *   **Filters:** Filter transactions by **Month** and **Category** for better analysis.
+5.  **Personalization:**
+    *   **Theme Support:** Fully functional **Dark Mode** and Light Mode.
 
 ### UI Components
-* **Bottom Navigation Bar:** For seamless switching between Dashboard, History, and Profile.
-* **Floating Action Button (FAB):** Quick access to add new transactions.
-* **Cards & ListTiles:** For displaying transaction details cleanly.
-* **Snackbar:** For user feedback (e.g., validation errors).
+*   **Bottom Navigation Bar:** Seamless switching between Dashboard, History, and Profile.
+*   **Material Design 3:** Modern UI with consistent theming.
 
 ---
 
@@ -65,11 +68,11 @@ This section describes the user entry points (Login and Signup) as well as the m
 | ![Login Screen](https://github.com/user-attachments/assets/5bd023b5-99da-416a-8f4d-1634426da15f) ![Signup Screen](https://github.com/user-attachments/assets/a619446c-0c64-4d00-9ab5-95ab0e237281) |![Dashboard1](https://github.com/user-attachments/assets/b1a2c708-b17b-4c3b-9e3a-43f35976a154) ![Dasboard2](https://github.com/user-attachments/assets/a90dd246-995f-4aca-b622-e430c56a21a3) |
 
 ### 2. Core Features (Transactions)
-Users can efficiently add new transactions, whether expenses or income. Expenses can be organized into customizable categories, allowing users to tailor the system to their needs and user also can upload tey receipt. Through these interfaces, users can review their complete transaction history and apply filters to view past transactions based on their preferred time period.
+Users can efficiently add new transactions, whether expenses or income. Expenses can be organized into customizable categories, allowing users to tailor the system to their needs. Through these interfaces, users can review their complete transaction history and apply filters to view past transactions based on their preferred time period.
 
 | Add Transaction | Transaction History |
 | :---: | :---: |
-|![expenses](https://github.com/user-attachments/assets/6944b1ea-735f-47d6-97d9-6f76b1a38bbc) ![Income](https://github.com/user-attachments/assets/6354a139-7fdb-4560-8e49-c928f049ba03) | ![History](https://github.com/user-attachments/assets/45307e60-98d3-4478-acf4-29651be17d0c) |
+| ![expense](https://github.com/user-attachments/assets/a79de454-ac87-4fec-a2a1-02323a65573e) ![Income](https://github.com/user-attachments/assets/6354a139-7fdb-4560-8e49-c928f049ba03) | ![History](https://github.com/user-attachments/assets/45307e60-98d3-4478-acf4-29651be17d0c) |
 
 ### 3. Account Management
 The user profile screen allows for personal data management and application settings.
@@ -80,22 +83,27 @@ The user profile screen allows for personal data management and application sett
 
 ---
 
-## h) Architecture / Technical Design
+## h) Technical Explanation
 
-### Component Structure
-The app follows a standard Flutter composition pattern:
-* **`MyApp` (Root):** Handles routing and theming (`Material3`, `Colors.indigo`).
-* **`MainContainerPage`:** Acts as the shell for the application, maintaining the `BottomNavigationBar` state. Switches between core feature pages without rebuilding the entire app
-* **Feature Widgets:** `DashboardPage`, `HistoryPage`, `AddTransactionPage`, `ProfilePage`.
+### Architecture & Tech Stack
+The application is built using **Flutter** and follows a modern, scalable architecture.
 
-### State Management
-* **Current Prototype:** We are currently using `setState` for local widget UI updates and a **Singleton Pattern (`DataStore`)** to mock a global database and share state between pages. Suitable for early-stage prototyping and UI validation
-* **Final Implementation:** We plan to migrate to **Riverpod** or **Provider** for more robust state management to handle asynchronous Firebase streams and separate business logic from UI code. Also Improved scalability as features grow.
+*   **Framework:** Flutter (Dart)
+*   **State Management:** **Riverpod** is used for robust and testable state management, handling asynchronous data streams and global app state (e.g., User, Theme).
+*   **Routing:** **GoRouter** for declarative and deep-linkable navigation.
 
-### Technical
-- services folder, containing all logics
-- ⁠models, containing Object classes
-- ⁠provider, global state management such as user state and darkmode state using riverpod
+### Backend (Firebase)
+*   **Firebase Authentication:** Handles secure user onboarding and session management.
+*   **Cloud Firestore:** A NoSQL cloud database used to store:
+    *   User profiles
+    *   Transaction records (real-time synchronization)
+*   **Firebase Storage:** Used for storing transaction receipt images.
+
+### Folder Structure
+*   `lib/views`: UI screens (Dashboard, History, Add Transaction, etc.).
+*   `lib/services`: Business logic and external API calls (Auth, Firestore, PDF).
+*   `lib/provider`: Riverpod providers for state management.
+*   `lib/models`: Data models (TransactionItem, etc.).
   
 ---
 
@@ -158,24 +166,17 @@ graph TD
 * Transactions can be added from anywhere using the FAB
 * Logout clears session and returns the user to the login screen
 
-## K) Limitation and Future Enhancements
+## K) Limitations and Future Enhancements
 
 ### Limitations
-
-* Despite its usefulness, MoneyTrail has several limitations in its current version:
-* The application relies on manual data entry, which may lead to incomplete or inaccurate records if users forget to log transactions.
-* The reporting and visualization features are basic and may not provide advanced financial insights.
-* Budget limits and alerts are not fully automated, reducing proactive spending control.
-* The application is designed for individual use and does not support shared or family budgeting.
+*   **Manual Data Entry:** The app currently relies on manual input for all transactions; there is no automatic bank synchronization or SMS parsing.
+*   **PDF Export:** The PDF export functionality for transaction history is currently disabled/under development.
 
 ### Future Enhancements
-
-* To improve functionality and user experience, several enhancements are proposed for future development:
-* Add budget limit notifications and alerts to warn users when spending exceeds predefined thresholds.
-* Introduce more advanced analytics such as monthly comparisons and spending trends.
-* Enable data export features (e.g., PDF or CSV reports) for personal record keeping.
-* Support multi-user or shared budgets for families or groups.
-* Integrate AI-based spending insights and recommendations for smarter financial planning.
+*   **Budget Alerts:** Implement push notifications to warn users when they exceed defined budget limits.
+*   **Data Export:** Enable users to export their transaction history as PDF or CSV files.
+*   **Advanced Analytics:** Add charts and graphs for monthly spending comparisons and trend analysis.
+*   **Multi-user Support:** Allow shared budgets for managing family or group finances.
 
 ## L) References & Documentation
 
@@ -189,7 +190,6 @@ This project is built using the **Flutter** framework and **Firebase** services.
 * **[Firebase for Flutter Guide](https://firebase.google.com/docs/flutter/setup):** Official guide on connecting Flutter apps to Firebase projects.
 * **[Cloud Firestore](https://firebase.google.com/docs/firestore):** Documentation for the NoSQL database used for real-time data storage.
 * **[Firebase Authentication](https://firebase.google.com/docs/auth):** Implementation details for user login and security.
-* **[Firebase Storage](https://firebase.google.com/docs/storage):** Allows uploading of files quickly and easily.
 
 ### Tools & Packages
 * **[Pub.dev](https://pub.dev/):** The official package repository for Dart and Flutter (used for searching plugins like `firebase_core`, `cloud_firestore`, etc.).
