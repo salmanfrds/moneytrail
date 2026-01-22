@@ -39,21 +39,20 @@ MoneyTrail is a mobile budget tracker application designed to help users monitor
 ## f) Summary of Achieved Features
 
 ### Core Modules
-1.  **Authentication:** Secure Login and Signup using **Firebase Authentication**.
+1.  **Authentication:** Secure Login and Signup using **Firebase Authentication** (Email/Password) and **Google Authentication**.
 2.  **Dashboard:** Real-time view of Total Balance and recent transactions.
 3.  **Transaction Management:**
     *   Add new Income or Expense with custom categories.
-    *   **Receipts:** Upload and view images (receipts) for transactions (stored in **Firebase Storage**).
+    *   **Receipts:** Attach receipt images to transactions.
+        *   Uses **Image Picker** to select images from the gallery or camera.
+        *   Images are uploaded to **Firebase Storage**.
+        *   The image download URL is stored in **Firestore** linked to the transaction record.
     *   **Edit/Delete:** Modify or remove existing transactions.
 4.  **History & Analytics:**
     *   Scrollable list of all past transactions.
     *   **Filters:** Filter transactions by **Month** and **Category** for better analysis.
 5.  **Personalization:**
     *   **Theme Support:** Fully functional **Dark Mode** and Light Mode.
-
-### UI Components
-*   **Bottom Navigation Bar:** Seamless switching between Dashboard, History, and Profile.
-*   **Material Design 3:** Modern UI with consistent theming.
 
 ---
 
